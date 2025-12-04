@@ -1,0 +1,100 @@
+<div class="mail-container">
+
+  <!-- Sidebar -->
+  <aside class="mail-sidebar">
+    <h2>Email</h2>
+
+    <button class="compose-btn" (click)="setView('compose')">
+      ✉️ Compose
+    </button>
+
+    <nav class="mail-menu">
+      <div class="menu-item" 
+           [class.active]="activeView === 'inbox'" 
+           (click)="setView('inbox')">📥 Inbox</div>
+
+      <div class="menu-item" 
+           [class.active]="activeView === 'sent'" 
+           (click)="setView('sent')">📤 Sent</div>
+
+      <div class="menu-item" 
+           [class.active]="activeView === 'drafts'" 
+           (click)="setView('drafts')">📝 Drafts</div>
+
+      <div class="menu-item" 
+           [class.active]="activeView === 'trash'" 
+           (click)="setView('trash')">🗑 Trash</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="mail-main">
+
+    <!-- COMPOSE SECTION -->
+    <div *ngIf="activeView === 'compose'">
+      <h1 class="page-heading">Compose Mail</h1>
+
+      <div class="panel">
+        <label>Select Recipients</label>
+        <div class="recipients">
+          <div *ngFor="let e of employees" class="recipient-item">
+            <input type="checkbox"
+                  [checked]="selectedRecipients.includes(e.email)"
+                  (change)="toggleRecipient(e.email)" />
+            {{ e.name }} - <span class="email">{{ e.email }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <label>Subject</label>
+        <input class="input" [(ngModel)]="subject" placeholder="Enter subject..." />
+      </div>
+
+      <div class="panel">
+        <label>Message</label>
+        <textarea class="textarea" [(ngModel)]="message" placeholder="Type message..."></textarea>
+      </div>
+
+      <button class="send-btn" (click)="sendMail()">📧 Send Mail</button>
+    </div>
+
+    <!-- SENT MAILS SECTION -->
+    <div *ngIf="activeView === 'sent'">
+      <h1 class="page-heading">Sent Mails</h1>
+
+      <div *ngIf="!sentMails.length" class="empty-msg">No sent mails.</div>
+
+      <div class="sent-list">
+        <div class="sent-card" *ngFor="let mail of sentMails">
+          <div class="sent-header">
+            <strong>{{ mail.subject }}</strong>
+            <span class="date">{{ mail.date }}</span>
+          </div>
+          <div class="sent-to">To: {{ mail.to.join(', ') }}</div>
+          <p class="sent-msg">{{ mail.message }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- INBOX (placeholder) -->
+    <div *ngIf="activeView === 'inbox'">
+      <h1 class="page-heading">Inbox</h1>
+      <p class="empty-msg">No inbox messages yet.</p>
+    </div>
+
+    <!-- Drafts -->
+    <div *ngIf="activeView === 'drafts'">
+      <h1 class="page-heading">Drafts</h1>
+      <p class="empty-msg">No drafts created.</p>
+    </div>
+
+    <!-- Trash -->
+    <div *ngIf="activeView === 'trash'">
+      <h1 class="page-heading">Trash</h1>
+      <p class="empty-msg">Trash is empty.</p>
+    </div>
+
+  </main>
+
+</div>

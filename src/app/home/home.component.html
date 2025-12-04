@@ -1,0 +1,338 @@
+<div class="app-shell" [class.sidebar-collapsed]="sidebarCollapsed">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" role="navigation" aria-label="Main menu">
+    <div class="sidebar-top">
+      <div class="sidebar-toggle" (click)="toggleSidebar()" title="Toggle menu">
+        <div class="sidebar-hamburger" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="brand-mini" *ngIf="!sidebarCollapsed">
+          <div style="font-weight:700">Dashboard</div>
+        </div>
+      </div>
+
+      <!-- search inside sidebar -->
+      <div class="sidebar-search" title="Search employees" *ngIf="!sidebarCollapsed">
+        <input class="input" placeholder="Search all menu items"
+               (input)="onSearch($any($event.target).value); sidebarSearch = $any($event.target).value" />
+      </div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="menu-section">
+        <div class="menu-heading" *ngIf="!sidebarCollapsed">Actions</div>
+
+        <button class="menu-item" (click)="openModal('add')">
+          <span class="menu-icon">➕</span>
+          <span class="menu-label" *ngIf="!sidebarCollapsed">Add employee</span>
+        </button>
+
+        <button class="menu-item" (click)="openModal('deactivateConfirm')">
+          <span class="menu-icon">⚠️</span>
+          <span class="menu-label" *ngIf="!sidebarCollapsed">Deactivate visible</span>
+        </button>
+
+        <button class="menu-item" (click)="openModal('announcement')">
+          <span class="menu-icon">📢</span>
+          <span class="menu-label" *ngIf="!sidebarCollapsed">Send announcement</span>
+        </button>
+
+        <button class="menu-item" (click)="exportCsv()">
+          <span class="menu-icon">📤</span>
+          <span class="menu-label" *ngIf="!sidebarCollapsed">Export CSV</span>
+        </button>
+      </div>
+
+      <hr />
+
+      <div class="menu-section">
+        <div class="menu-heading" *ngIf="!sidebarCollapsed">Filters</div>
+
+        <div class="menu-control">
+          <label *ngIf="!sidebarCollapsed">Department</label>
+          <select class="select" (change)="onFilterChange('department',$any($event.target).value)" >
+            <option value="">All</option>
+            <option *ngFor="let d of uniqueValues.department" [value]="d">{{d}}</option>
+          </select>
+        </div>
+
+        <div class="menu-control">
+          <label *ngIf="!sidebarCollapsed">Role</label>
+          <select class="select" (change)="onFilterChange('role',$any($event.target).value)">
+            <option value="">All</option>
+            <option *ngFor="let r of uniqueValues.role" [value]="r">{{r}}</option>
+          </select>
+        </div>
+
+        <div class="menu-control">
+          <label *ngIf="!sidebarCollapsed">Location</label>
+          <select class="select" (change)="onFilterChange('location',$any($event.target).value)">
+            <option value="">All</option>
+            <option *ngFor="let l of uniqueValues.location" [value]="l">{{l}}</option>
+          </select>
+        </div>
+
+        <div class="menu-control">
+          <label *ngIf="!sidebarCollapsed">Team</label>
+          <select class="select" (change)="onFilterChange('team',$any($event.target).value)">
+            <option value="">All</option>
+            <option *ngFor="let t of uniqueValues.team" [value]="t">{{t}}</option>
+          </select>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="menu-section">
+        <div class="menu-heading" *ngIf="!sidebarCollapsed">Sort</div>
+        <select class="select" (change)="onSort($any($event.target).value)">
+          <option value="name">Name</option>
+          <option value="department">Department</option>
+          <option value="role">Role</option>
+        </select>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer" *ngIf="!sidebarCollapsed">
+      <div style="font-size:0.85rem;color:#64748b">© Company</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- topbar / header preserved -->
+    <div class="topbar">
+      <div class="brand">
+        <svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="1.5" y="3" width="21" height="18" rx="3.5" fill="#6b21a8" opacity="0.12"/>
+          <path d="M7 11c1.657 0 3-1.567 3-3.5S8.657 4 7 4 4 5.567 4 7.5 5.343 11 7 11zM17 7.5c0-1.933-1.343-3.5-3-3.5s-3 1.567-3 3.5S12.657 11 14.314 11 17 9.433 17 7.5z" fill="#7c3aed"/>
+        </svg>
+        <div>
+          <h1>Employee Management</h1>
+          <p>Overview — people, teams and activity</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="num">{{ filteredTotal }}</div><div class="label">Visible</div></div>
+        <div class="stat"><div class="num">{{ employees.length }}</div><div class="label">Total</div></div>
+        <div class="stat"><div class="num">{{ uniqueCount('department') }}</div><div class="label">Departments</div></div>
+      </div>
+    </div>
+
+    <!-- controls row remains (search and filters are also in sidebar) -->
+    <div class="controls">
+      <div class="search" title="Search employees">
+        <input class="search-input" type="search" placeholder="Search by name or email..." (input)="onSearch($any($event.target).value)" />
+      </div>
+
+      <select class="filter" (change)="onFilterChange('department',$any($event.target).value)">
+        <option value="">All departments</option>
+        <option *ngFor="let d of uniqueValues.department" [value]="d">{{d}}</option>
+      </select>
+
+      <select class="filter" (change)="onFilterChange('role',$any($event.target).value)">
+        <option value="">All roles</option>
+        <option *ngFor="let r of uniqueValues.role" [value]="r">{{r}}</option>
+      </select>
+
+      <select class="filter small" (change)="onFilterChange('location',$any($event.target).value)">
+        <option value="">All locations</option>
+        <option *ngFor="let l of uniqueValues.location" [value]="l">{{l}}</option>
+      </select>
+
+      <select class="filter small" (change)="onFilterChange('team',$any($event.target).value)">
+        <option value="">All teams</option>
+        <option *ngFor="let t of uniqueValues.team" [value]="t">{{t}}</option>
+      </select>
+
+      <select class="filter small" (change)="onSort($any($event.target).value)">
+        <option value="name">Sort: name</option>
+        <option value="department">Sort: department</option>
+        <option value="role">Sort: role</option>
+      </select>
+
+      <button class="primary" (click)="exportCsv()">Export CSV</button>
+    </div>
+
+    <!-- content area containing cards -->
+    <div class="content">
+      <section class="left">
+        <div class="grid" *ngIf="displayedEmployees.length; else emptyList">
+          <article class="card" *ngFor="let e of displayedEmployees">
+            <div class="title">
+              <div>
+                <div style="font-size:1rem">{{e.name}}</div>
+                <div class="meta">{{e.email}}</div>
+              </div>
+              <div class="meta" style="text-transform:capitalize">{{e.role}}</div>
+            </div>
+
+            <div class="meta">{{e.department}} • {{e.location}}</div>
+
+            <div class="tags">
+              <span class="tag">{{e.team}}</span>
+              <span class="tag" *ngIf="e.manager">Manager</span>
+              <span class="tag" *ngIf="e.active">Active</span>
+              <span class="tag" *ngIf="!e.active" style="background:rgba(244,63,94,0.06);color:#ef4444">Inactive</span>
+            </div>
+
+            <div class="actions">
+              <button class="ghost" (click)="openModal('details', e)">Details</button>
+              <button class="ghost" (click)="openModal('impersonate', e)">Impersonate</button>
+
+              <!-- EDIT -->
+              <button class="ghost" style="background:#dbeafe" (click)="openModal('edit', e)">Edit</button>
+
+              <!-- DELETE -->
+              <button class="ghost" style="background:#fee2e2;color:#b91c1c" (click)="openModal('delete', e)">Delete</button>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #emptyList>
+          <div class="panel empty">No employees match your search/filters.</div>
+        </ng-template>
+
+        <div class="pagination">
+          <button class="btn" (click)="changePage(-1)" [disabled]="page<=1">Previous</button>
+          <div style="min-width:140px;text-align:center">Page {{page}} / {{totalPages}}</div>
+          <button class="btn" (click)="changePage(1)" [disabled]="page>=totalPages">Next</button>
+        </div>
+      </section>
+
+      <aside class="right">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+            <div style="font-weight:700;align-content: center;">Quick Navigation</div>
+            <div style="color:#64748b;font-size:0.85rem">Today</div>
+          </div>
+          
+          <button class="ghost" (click)="openView()">Columnar view</button>
+          <button class="ghost" (click)="openAnalysis()">Quick Analysis</button>
+          <button class="ghost" (click)="openMail()">Send Mail</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" *ngIf="modalOpen" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">{{ modalTitle }}</div>
+
+    <!-- DETAILS -->
+    <div *ngIf="modalType === 'details'">
+      <p><strong>Name:</strong> {{ modalData?.name }}</p>
+      <p><strong>Email:</strong> {{ modalData?.email }}</p>
+      <p><strong>Role:</strong> {{ modalData?.role }}</p>
+      <p><strong>Department:</strong> {{ modalData?.department }}</p>
+      <p><strong>Team:</strong> {{ modalData?.team }}</p>
+      <p><strong>Location:</strong> {{ modalData?.location }}</p>
+    </div>
+
+    <!-- IMPERSONATE -->
+    <div *ngIf="modalType === 'impersonate'">
+      <p>Start impersonating <strong>{{ modalData?.name }}</strong>?</p>
+    </div>
+
+    <!-- ADD EMPLOYEE -->
+    <div *ngIf="modalType === 'add'">
+      <label>Name</label>
+      <input class="input" [(ngModel)]="formName" />
+
+      <label style="margin-top:10px">Email</label>
+      <input class="input" [(ngModel)]="formEmail" />
+
+      <label style="margin-top:10px">Department</label>
+      <select class="select" [(ngModel)]="formDepartment">
+        <option *ngFor="let d of uniqueValues.department" [value]="d">{{d}}</option>
+      </select>
+
+      <label style="margin-top:10px">Role</label>
+      <select class="select" [(ngModel)]="formRole">
+        <option *ngFor="let r of uniqueValues.role" [value]="r">{{r}}</option>
+      </select>
+
+      <label style="margin-top:10px">Location</label>
+      <select class="select" [(ngModel)]="formLocation">
+        <option *ngFor="let l of uniqueValues.location" [value]="l">{{l}}</option>
+      </select>
+
+      <label style="margin-top:10px">Team</label>
+      <select class="select" [(ngModel)]="formTeam">
+        <option *ngFor="let t of uniqueValues.team" [value]="t">{{t}}</option>
+      </select>
+
+      <label style="margin-top:8px">
+        <input type="checkbox" [(ngModel)]="formActive" /> Active
+      </label>
+    </div>
+
+    <!-- EDIT EMPLOYEE -->
+    <div *ngIf="modalType === 'edit'">
+      <label>Name</label>
+      <input class="input" [(ngModel)]="formName" />
+
+      <label style="margin-top:10px">Email</label>
+      <input class="input" [(ngModel)]="formEmail" />
+
+      <label style="margin-top:10px">Department</label>
+      <select class="select" [(ngModel)]="formDepartment">
+        <option *ngFor="let d of uniqueValues.department" [value]="d">{{d}}</option>
+      </select>
+
+      <label style="margin-top:10px">Role</label>
+      <select class="select" [(ngModel)]="formRole">
+        <option *ngFor="let r of uniqueValues.role" [value]="r">{{r}}</option>
+      </select>
+
+      <label style="margin-top:10px">Location</label>
+      <select class="select" [(ngModel)]="formLocation">
+        <option *ngFor="let l of uniqueValues.location" [value]="l">{{l}}</option>
+      </select>
+
+      <label style="margin-top:10px">Team</label>
+      <select class="select" [(ngModel)]="formTeam">
+        <option *ngFor="let t of uniqueValues.team" [value]="t">{{t}}</option>
+      </select>
+
+      <label style="margin-top:8px">
+        <input type="checkbox" [(ngModel)]="formActive" /> Active
+      </label>
+    </div>
+
+    <!-- ANNOUNCEMENT -->
+    <div *ngIf="modalType === 'announcement'">
+      <label>Announcement message</label>
+      <textarea class="input" style="height:90px" [(ngModel)]="formMessage"></textarea>
+    </div>
+
+    <!-- DEACTIVATE -->
+    <div *ngIf="modalType === 'deactivateConfirm'">
+      <p>Deactivate all visible employees?</p>
+    </div>
+
+    <!-- DELETE EMPLOYEE -->
+    <div *ngIf="modalType === 'delete'">
+      <p>Are you sure you want to permanently delete <strong>{{ modalData?.name }}</strong>?</p>
+      <p style="color:#b91c1c">This cannot be undone.</p>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="modal-actions">
+      <button class="ghost-btn" (click)="closeModal()">Cancel</button>
+
+      <button class="primary-btn" *ngIf="modalType === 'details'" (click)="closeModal()">Close</button>
+      <button class="primary-btn" *ngIf="modalType === 'impersonate'" (click)="impersonateConfirm()">Start</button>
+
+      <button class="primary-btn" *ngIf="modalType === 'add'" (click)="addEmployeeConfirm()">Add</button>
+      <button class="primary-btn" *ngIf="modalType === 'announcement'" (click)="sendAnnouncementConfirm()">Send</button>
+      <button class="primary-btn" *ngIf="modalType === 'deactivateConfirm'" (click)="bulkDeactivateConfirm()">Deactivate</button>
+
+      <button class="primary-btn" *ngIf="modalType === 'edit'" (click)="editEmployeeConfirm()">Update</button>
+      <button class="primary-btn" *ngIf="modalType === 'delete'" style="background:#dc2626" (click)="deleteEmployeeConfirm()">Delete</button>
+    </div>
+  </div>
+</div>

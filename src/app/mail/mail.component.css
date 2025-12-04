@@ -1,0 +1,135 @@
+.mail-container {
+  display: flex;
+  height: 100vh;
+  background: antiquewhite;
+}
+
+/* Sidebar */
+.mail-sidebar {
+  width: 260px;
+  background: #e8e6e6;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.mail-sidebar h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.compose-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 25px;
+  font-size: 1rem;
+}
+
+.mail-menu .menu-item {
+  padding: 12px 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #475569;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.mail-menu .menu-item:hover,
+.mail-menu .menu-item.active {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+/* Main */
+.mail-main {
+  flex: 1;
+  padding: 25px 40px;
+  overflow-y: auto;
+}
+
+.page-heading {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.panel {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1e293b;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+}
+
+.textarea {
+  height: 140px;
+  resize: none;
+}
+
+.recipients {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.recipient-item {
+  padding: 6px 0;
+  font-size: 0.95rem;
+}
+
+.email {
+  color: #64748b;
+}
+
+/* Send Button */
+.send-btn {
+  padding: 14px 24px;
+  background: #10b981;
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Sent mail cards */
+.history-title {
+  margin-top: 30px;
+}
+
+.sent-card {
+  background: white;
+  padding: 18px;
+  border-radius: 8px;
+  margin-top: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.sent-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.sent-msg {
+  margin-top: 10px;
+  color: #475569;
+}

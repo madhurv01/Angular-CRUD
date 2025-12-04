@@ -1,0 +1,52 @@
+<div class="view-wrapper">
+  <h2 class="header">Employee Directory</h2>
+
+  <input 
+    type="text"
+    class="search-box"
+    placeholder="Search name, email or department..."
+    [(ngModel)]="search"
+  >
+
+  <div class="table-container">
+    <table class="emp-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name / Email</th>
+          <th>Department</th>
+          <th>Role</th>
+          <th>Location</th>
+          <th>Team</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let emp of filtered">
+          <td>{{ emp.id }}</td>
+
+          <td>
+            <div class="name">{{ emp.name }}</div>
+            <div class="email">{{ emp.email }}</div>
+          </td>
+
+          <td>{{ emp.department }}</td>
+          <td>{{ emp.role }}</td>
+          <td>{{ emp.location }}</td>
+          <td>{{ emp.team }}</td>
+
+          <td>
+            <span class="badge" [ngClass]="emp.active ? 'active' : 'inactive'">
+              {{ emp.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </tr>
+
+        <tr *ngIf="filtered.length==0">
+          <td colspan="7" class="no-data">No employees found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
