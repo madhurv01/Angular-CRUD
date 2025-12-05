@@ -378,12 +378,137 @@
   margin-top:6px;
 }
 
-/* RESPONSIVE */
 @media (max-width: 980px) {
+
+  /* Sidebar becomes overlay */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9000;
+    width: 240px;
+    height: 100%;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+    background: white;
+  }
+
+  /* Hide automatically unless toggled */
+  .app-shell.sidebar-collapsed .sidebar {
+    display: none;
+  }
+
+  /* Main content expands fully */
+  .main-content {
+    padding: 1rem;
+  }
+
+  /* Content layout becomes single-column */
   .content {
     grid-template-columns: 1fr;
   }
-  .right { order: -1; }
-  .sidebar { display: none; }
-  .app-shell.sidebar-collapsed .sidebar { display: none; }
+
+  /* Right panel moves below cards */
+  .right {
+    order: 10;
+    margin-top: 1rem;
+  }
+
+  /* Controls wrap nicely */
+  .controls {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
 }
+@media (max-width: 680px) {
+
+  /* Topbar switches to stacked layout */
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .brand h1 {
+    font-size: 1.3rem;
+  }
+
+  .brand p {
+    font-size: 0.85rem;
+  }
+
+  /* Stats align horizontally with wrap */
+  .stats {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  /* Filters and search become full width */
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter,
+  .search-input {
+    width: 100%;
+  }
+
+  /* Cards single-column layout */
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card {
+    padding: 0.9rem;
+  }
+
+  /* Right panel full width */
+  .right .panel {
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+
+  .brand svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand h1 {
+    font-size: 1.15rem;
+  }
+
+  .menu-item {
+    padding: 6px;
+  }
+
+  .card {
+    gap: 0.4rem;
+  }
+
+  .tags {
+    gap: 4px;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  /* Pagination compact */
+  .pagination div {
+    font-size: 0.85rem;
+  }
+
+  /* Modal improved on phones */
+  .modal-box {
+    width: 95%;
+    padding: 1rem;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+}
+
