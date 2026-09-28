@@ -48,6 +48,18 @@ validation takes you to `/home` — there's no real backend behind it.
 - Plain CSS per component (no UI framework)
 - `localStorage` as the persistence layer (acts as a mock database)
 
+## Browser support
+
+Since all data lives in `localStorage`, the app requires a modern evergreen
+browser with `localStorage` enabled:
+
+- Chrome, Edge, Firefox, and Safari (latest two major versions)
+- JavaScript and `localStorage` must be enabled (no incognito/private
+  restrictions that block storage)
+- Clearing site data/cache will reset the seeded employee dataset back to
+  the original 10 sample records
+- No Internet Explorer support (Angular 17 does not target it)
+
 ## Project structure
 
 ```
