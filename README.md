@@ -176,6 +176,19 @@ later (e.g., replacing `save()`/`ngOnInit()` with an `HttpClient` service).
 - Add form validation feedback (required fields, email format) in the modals.
 - Add unit tests covering the CRUD methods in `HomeComponent`.
 
+## Troubleshooting
+
+- **Blank page or seed data not loading** — open the browser dev tools
+  console for errors; clear the `employees` key in `localStorage` and
+  reload to force reseeding.
+- **`ng: command not found`** — the Angular CLI isn't installed globally;
+  run `npm install -g @angular/cli` or use `npx ng serve` instead.
+- **Port 4200 already in use** — stop the other process or run
+  `ng serve --port 4201`.
+- **Changes to employee data not persisting** — check that the browser
+  isn't in private/incognito mode with storage restrictions, and that
+  `localStorage` hasn't been disabled via browser settings.
+
 ## Further help
 
 Run `ng help` or see the
