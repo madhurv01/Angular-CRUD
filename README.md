@@ -189,6 +189,19 @@ later (e.g., replacing `save()`/`ngOnInit()` with an `HttpClient` service).
   isn't in private/incognito mode with storage restrictions, and that
   `localStorage` hasn't been disabled via browser settings.
 
+## Contributing
+
+Contributions are welcome, whether it's a bug fix, a new feature, or a
+documentation improvement:
+
+1. Fork the repository and create a feature branch off `master`.
+2. Make your changes, keeping components standalone and consistent with
+   the existing code style.
+3. Run `ng build` locally to confirm the project still compiles cleanly.
+4. Commit with a clear, descriptive message and open a pull request
+   describing what changed and why.
+5. Keep PRs focused — one feature or fix per PR makes review easier.
+
 ## Further help
 
 Run `ng help` or see the
