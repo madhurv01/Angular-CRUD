@@ -202,6 +202,20 @@ documentation improvement:
    describing what changed and why.
 5. Keep PRs focused — one feature or fix per PR makes review easier.
 
+## License
+
+This project is provided as-is for learning and demonstration purposes. No
+explicit license file is currently included; if you plan to reuse or
+redistribute this code, please check with the repository owner first.
+
+## Acknowledgments
+
+- Built with [Angular](https://angular.dev/) and the Angular CLI.
+- Thanks to the Angular team and community for the documentation and
+  tooling that made this project straightforward to put together.
+- The banner image at the top of this README was added purely for visual
+  presentation and is not required to run the app.
+
 ## Further help
 
 Run `ng help` or see the
